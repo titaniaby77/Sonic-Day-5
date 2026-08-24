@@ -3,157 +3,575 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111827">
-<title>Sonic Day 5 — Fractured Time</title>
+<meta name="theme-color" content="#04130f">
+<title>Birthday — Fractured Time</title>
+
 <style>
 :root{
-  --bg:#070a11;--panel:#111725;--text:#eef4fa;--muted:#aeb9c7;
-  --violet:#916ce8;--cyan:#62d7e7;--green:#6fd485;--gold:#e5b95a;
-  --red:#c75e67;--blue:#527fce;--pink:#d876bb;
+  --void:#020706;
+  --void2:#050b12;
+  --toxic:#79ff38;
+  --toxic2:#c5ff54;
+  --cyan:#31edff;
+  --cyan2:#a2f8ff;
+  --violet:#a34cff;
+  --violet2:#dd8cff;
+  --red:#ff385c;
+  --white:#f5ffff;
+  --muted:#9eb9b3;
 }
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+html,body{margin:0;min-height:100%;background:var(--void);color:var(--white);font-family:Arial,Helvetica,sans-serif}
 body{min-height:100dvh;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
 button,input{font:inherit}
-button{cursor:pointer;min-height:44px;touch-action:manipulation}
+button{cursor:pointer;min-height:46px;touch-action:manipulation}
+button:disabled{cursor:not-allowed}
 #app{
-  position:relative;min-height:100dvh;overflow:hidden;
+  position:relative;min-height:100dvh;overflow:hidden;isolation:isolate;
   background:
-    radial-gradient(circle at 14% 10%,rgba(145,108,232,.2),transparent 28%),
-    radial-gradient(circle at 80% 16%,rgba(98,215,231,.13),transparent 24%),
-    linear-gradient(180deg,#171d2b,#090d16 58%,#05070b)
+    radial-gradient(circle at 17% 12%,rgba(121,255,56,.15),transparent 27%),
+    radial-gradient(circle at 82% 17%,rgba(163,76,255,.17),transparent 24%),
+    radial-gradient(circle at 51% 67%,rgba(49,237,255,.07),transparent 33%),
+    linear-gradient(180deg,#051616,#050b11 54%,#010504);
 }
-.grid{position:absolute;inset:0;opacity:.05;pointer-events:none;background:
-linear-gradient(rgba(255,255,255,.11) 1px,transparent 1px),
-linear-gradient(90deg,rgba(255,255,255,.11) 1px,transparent 1px);background-size:36px 36px}
-.scan{position:absolute;inset:0;opacity:.05;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 4px,rgba(255,255,255,.1) 5px)}
-.topbar{position:absolute;z-index:30;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:calc(12px + env(safe-area-inset-top)) 14px 10px}
-.brand{font-size:.63rem;letter-spacing:.18em;text-transform:uppercase;font-weight:1000;color:#dce4ec}.brand b{color:var(--cyan)}
-.sound{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.32);color:#fff}
-.progress{position:absolute;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--violet),var(--cyan),var(--green));z-index:40;transition:.4s}
-.emeraldCounter{position:absolute;right:70px;top:calc(18px + env(safe-area-inset-top));z-index:29;font-size:.55rem;letter-spacing:.1em;font-weight:1000;color:#ccd5df}
-.screen{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:calc(72px + env(safe-area-inset-top)) 16px calc(32px + env(safe-area-inset-bottom));opacity:0;pointer-events:none;transform:translateY(12px);transition:.5s ease}
-.screen.active{opacity:1;pointer-events:auto;transform:none}
+.world{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:-3}
+.grid{
+  position:absolute;inset:-30%;opacity:.18;
+  transform:perspective(800px) rotateX(64deg) translateY(35%);
+  transform-origin:center;
+  background:
+    linear-gradient(rgba(121,255,56,.25) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(49,237,255,.20) 1px,transparent 1px);
+  background-size:52px 52px;
+  animation:gridMove 5s linear infinite;
+}
+@keyframes gridMove{to{background-position:0 104px,104px 0}}
+.horizon{
+  position:absolute;left:-15%;right:-15%;bottom:14%;height:5px;background:var(--toxic);
+  box-shadow:0 0 12px var(--toxic),0 0 35px var(--toxic),0 0 70px rgba(121,255,56,.5);
+  opacity:.55
+}
+.fracture{
+  position:absolute;width:2px;height:48%;top:-4%;
+  background:linear-gradient(transparent,var(--violet),var(--cyan),transparent);
+  box-shadow:0 0 12px currentColor;transform-origin:top;opacity:.25
+}
+.fracture.f1{left:18%;transform:rotate(20deg)}
+.fracture.f2{right:22%;top:12%;transform:rotate(-26deg)}
+.fracture.f3{left:54%;top:-15%;transform:rotate(7deg)}
+.particles{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 10% 30%,var(--toxic) 0 2px,transparent 3px),
+    radial-gradient(circle at 35% 75%,var(--cyan) 0 2px,transparent 3px),
+    radial-gradient(circle at 80% 25%,var(--violet) 0 2px,transparent 3px),
+    radial-gradient(circle at 65% 60%,var(--toxic) 0 1px,transparent 2px);
+  background-size:150px 130px,180px 160px,210px 170px,120px 100px;
+  opacity:.25;animation:particles 9s linear infinite
+}
+@keyframes particles{to{transform:translate(-130px,-60px)}}
+.ring{
+  position:absolute;width:70px;height:70px;border-radius:50%;
+  border:8px solid var(--toxic2);
+  box-shadow:0 0 5px #fff,0 0 18px var(--toxic),inset 0 0 10px var(--toxic);
+  opacity:.18;animation:ringWarp 4s ease-in-out infinite
+}
+.ring.r1{left:6%;top:30%}.ring.r2{right:8%;top:51%;animation-delay:-1.5s}.ring.r3{left:43%;bottom:7%;transform:scale(.55);animation-delay:-2.3s}
+@keyframes ringWarp{0%,100%{transform:rotateY(0) translateY(0)}50%{transform:rotateY(78deg) translateY(-18px)}}
+.scan{
+  position:absolute;inset:0;pointer-events:none;z-index:90;opacity:.06;
+  background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.28) 4px)
+}
+.scanBar{
+  position:absolute;z-index:2;left:0;right:0;top:-20%;height:120px;pointer-events:none;
+  background:linear-gradient(transparent,rgba(121,255,56,.08),rgba(49,237,255,.10),transparent);
+  animation:scanBar 5s linear infinite
+}
+@keyframes scanBar{to{transform:translateY(140vh)}}
+.transitionFlash{
+  position:absolute;inset:0;z-index:150;pointer-events:none;opacity:0;
+  background:linear-gradient(115deg,transparent 0 35%,rgba(121,255,56,.85) 45%,rgba(49,237,255,.9) 52%,rgba(163,76,255,.8) 58%,transparent 68%);
+  transform:translateX(-120%)
+}
+.transitionFlash.go{animation:transitionSlash .62s cubic-bezier(.5,0,.2,1)}
+@keyframes transitionSlash{
+  0%{opacity:0;transform:translateX(-120%) skewX(-15deg)}
+  25%,70%{opacity:1}
+  100%{opacity:0;transform:translateX(120%) skewX(-15deg)}
+}
+.flashScreen{position:absolute;inset:0;z-index:160;opacity:0;pointer-events:none;background:#fff}
+.flashScreen.hit{animation:flashHit .48s ease}
+@keyframes flashHit{0%{opacity:0}10%{opacity:1}28%{opacity:.08}55%{opacity:.65}100%{opacity:0}}
+.chaosBlast{
+  position:absolute;inset:0;z-index:155;pointer-events:none;opacity:0;
+  background:radial-gradient(circle at center,#fff 0 3%,var(--toxic2) 8%,rgba(49,237,255,.85) 18%,rgba(163,76,255,.45) 35%,transparent 60%)
+}
+.chaosBlast.go{animation:chaosBlast 1s ease-out}
+@keyframes chaosBlast{0%{opacity:0;transform:scale(.15)}15%{opacity:1}70%{opacity:.55}100%{opacity:0;transform:scale(2)}}
+
+.topbar{
+  position:absolute;top:0;left:0;right:0;z-index:50;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:calc(12px + env(safe-area-inset-top)) 14px 10px
+}
+.brand{
+  padding:8px 13px;background:rgba(0,8,10,.7);
+  border-left:4px solid var(--toxic);border-bottom:1px solid rgba(121,255,56,.25);
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;font-weight:1000;color:#dff8ee;
+  box-shadow:0 0 20px rgba(121,255,56,.07)
+}
+.brand b{color:var(--toxic);text-shadow:0 0 12px var(--toxic)}
+.sound{
+  width:46px;height:46px;border-radius:50%;border:1px solid rgba(121,255,56,.4);
+  background:rgba(0,10,12,.72);color:#fff;box-shadow:0 0 18px rgba(121,255,56,.12)
+}
+.emeraldCounter{
+  position:absolute;right:74px;top:calc(20px + env(safe-area-inset-top));z-index:49;
+  font-size:.53rem;letter-spacing:.11em;font-weight:1000;color:#c9e4db
+}
+.progress{
+  position:absolute;top:0;left:0;height:4px;width:0;z-index:80;
+  background:linear-gradient(90deg,var(--violet),var(--cyan),var(--toxic));
+  box-shadow:0 0 8px var(--cyan),0 0 18px var(--toxic);
+  transition:width .5s cubic-bezier(.2,.8,.2,1)
+}
+.screen{
+  position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;
+  padding:calc(74px + env(safe-area-inset-top)) 16px calc(32px + env(safe-area-inset-bottom));
+  opacity:0;pointer-events:none;overflow-y:auto;
+  transform:scale(.965) translateY(22px);filter:blur(8px);
+  transition:opacity .48s ease,transform .7s cubic-bezier(.12,.75,.2,1),filter .55s ease
+}
+.screen.active{opacity:1;pointer-events:auto;filter:none;transform:scale(1) translateY(0)}
+.screen.active .card,.screen.active .story{animation:cardArrival .65s cubic-bezier(.2,.8,.25,1)}
+@keyframes cardArrival{0%{opacity:0;transform:translateY(35px) scale(.94)}60%{transform:translateY(-4px) scale(1.012)}100%{opacity:1;transform:none}}
 .wrap{width:min(920px,100%);text-align:center}
-.kicker{font-size:.61rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);font-weight:1000}
-.hero{margin:8px 0 0;font-size:clamp(2.8rem,11vw,6.2rem);font-weight:1000;line-height:.86;letter-spacing:-.055em;text-transform:uppercase;font-style:italic}
-.hero em{display:block;color:var(--violet)}
-.sub{margin-top:16px;font-size:.72rem;letter-spacing:.17em;text-transform:uppercase;font-weight:1000;color:#d5dde6}
-.primary,.ghost,.danger{margin-top:20px;padding:13px 22px;border-radius:999px;text-transform:uppercase;letter-spacing:.12em;font-size:.7rem;font-weight:1000}
-.primary{border:0;background:linear-gradient(#78dce8,#3f87a4);color:#071017}
-.ghost{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#fff}
-.danger{border:1px solid rgba(210,90,100,.5);background:rgba(140,40,50,.17);color:#ffdede}
-.card,.story{width:min(740px,100%);margin:auto;padding:25px 21px;background:rgba(14,19,30,.93);border:1px solid rgba(255,255,255,.12);box-shadow:0 24px 60px rgba(0,0,0,.34)}
-.story{text-align:left;border-left:4px solid var(--violet)}
-.card h2,.story h2{margin:7px 0 11px;font-size:clamp(1.8rem,7vw,3.2rem);font-weight:400}
-.card p,.story p{line-height:1.6;color:#d7e0e8}.story p{margin:0}.story p+p{margin-top:12px}
-.realMission{margin:18px auto 0;max-width:590px;padding:18px 17px;text-align:left;border-top:2px solid var(--cyan);border-bottom:2px solid var(--cyan);background:rgba(0,0,0,.18)}
-.realMission strong{color:#93e7ef}.realMission ol,.realMission ul{padding-left:20px;line-height:1.55;color:#d7e0e8}
-.joke{margin-top:12px;color:#d7caff;font-size:.79rem;font-style:italic}
-.status{min-height:26px;margin-top:12px;font-size:.73rem;letter-spacing:.07em;font-weight:1000;color:#dbe4ec}
-
-/* countdown */
-.countdown{font-size:clamp(4rem,18vw,9rem);font-weight:1000;color:var(--violet);line-height:1;margin:20px 0}
-.timerBar{height:9px;max-width:500px;margin:16px auto;background:rgba(255,255,255,.08);overflow:hidden}
-.timerFill{height:100%;width:100%;background:linear-gradient(90deg,var(--violet),var(--cyan));transform-origin:left}
-
-/* emerald */
-.emerald{width:95px;height:126px;margin:18px auto 12px;clip-path:polygon(50% 0,88% 22%,100% 60%,50% 100%,0 60%,12% 22%);box-shadow:0 0 34px currentColor;animation:float 1.8s ease-in-out infinite alternate}
-.emerald.green{color:#6fdb86;background:linear-gradient(135deg,#eaffef 0 9%,#6dde86 26%,#279043 72%,#0d4d22)}
-.emerald.cyan{color:#73e6ee;background:linear-gradient(135deg,#efffff 0 9%,#71e5ed 27%,#2a9ca8 70%,#10535c)}
-@keyframes float{to{transform:translateY(-9px) rotate(2deg)}}
-.signal{margin:18px auto 0;max-width:530px;text-align:left}
-.signalRow{display:flex;justify-content:space-between;font-size:.69rem;font-weight:1000;letter-spacing:.1em}
-.signalBar{height:17px;margin-top:7px;background:#0a0e15;border:1px solid rgba(255,255,255,.13);padding:2px}
-.signalFill{height:100%;width:84%;background:linear-gradient(90deg,#2e7e43,#6ddd82,#b4f5bf);animation:pulseSignal 1s ease-in-out infinite alternate}
-@keyframes pulseSignal{to{filter:brightness(1.4)}}
-
-/* secret GM screen */
-.secret{border:2px solid rgba(200,94,103,.45);background:rgba(55,15,25,.35);padding:18px;max-width:600px;margin:18px auto 0}
-.secret h3{color:#ff9ca4;margin:0 0 8px}
-.secret p{color:#f2d8db;line-height:1.5}
-
-/* challenge */
-.challengeBox{max-width:580px;margin:18px auto 0;padding:20px;border:1px solid rgba(255,255,255,.14);background:#0c121d}
-.challengeName{font-size:clamp(1.5rem,6vw,2.6rem);font-weight:1000;color:#f2c26b;margin:8px 0}
-.challengeText{line-height:1.55;color:#dbe5ec}
-
-/* shadow says */
-.shadowCommand{font-size:clamp(2rem,8vw,4.2rem);font-weight:1000;line-height:1.03;margin:22px auto;color:#f0f4f8;max-width:700px}
-.commandCount{font-size:.7rem;letter-spacing:.12em;color:#9eacbb;font-weight:1000}
+.kicker{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--cyan2);font-weight:1000;text-shadow:0 0 10px rgba(49,237,255,.45)}
+.hero{
+  margin:10px 0 0;font-family:Arial Black,Arial,sans-serif;font-size:clamp(2.8rem,11vw,6.3rem);
+  line-height:.84;font-weight:1000;font-style:italic;text-transform:uppercase;letter-spacing:-.06em;color:#f4ffff;
+  text-shadow:3px 0 0 rgba(49,237,255,.55),-3px 0 0 rgba(163,76,255,.45),0 0 25px rgba(255,255,255,.12);
+  animation:heroGlitch 4.6s infinite
+}
+.hero em{display:block;color:var(--toxic);text-shadow:2px 0 var(--cyan),-2px 0 var(--violet),0 0 18px rgba(121,255,56,.8)}
+@keyframes heroGlitch{0%,91%,100%{transform:none}92%{transform:translateX(3px)}93%{transform:translateX(-5px)}94%{transform:translateX(2px)}95%{transform:none}}
+.sub{margin-top:17px;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;font-weight:1000;color:#c8dad5}
+.primary,.ghost,.danger{
+  position:relative;margin-top:20px;min-height:50px;padding:13px 23px;overflow:hidden;border-radius:3px;
+  text-transform:uppercase;letter-spacing:.12em;font-size:.69rem;font-weight:1000;
+  transition:transform .13s ease,box-shadow .13s ease,filter .13s ease
+}
+.primary{
+  border:1px solid #dfff9b;background:linear-gradient(180deg,#a9ff50,#4fcb30);color:#031007;
+  box-shadow:0 0 10px rgba(121,255,56,.35),0 0 25px rgba(121,255,56,.16),inset 0 1px rgba(255,255,255,.65)
+}
+.primary:active{transform:scale(.97);filter:brightness(1.2)}
+.ghost{border:1px solid rgba(49,237,255,.35);background:rgba(3,20,24,.65);color:#ecffff}
+.danger{border:1px solid rgba(255,56,92,.55);background:rgba(110,9,28,.38);color:#ffdce4}
+.card,.story{
+  position:relative;width:min(740px,100%);margin:auto;padding:27px 21px;
+  background:linear-gradient(180deg,rgba(4,18,21,.96),rgba(2,8,13,.96));
+  border:1px solid rgba(49,237,255,.16);
+  clip-path:polygon(15px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 15px),calc(100% - 15px) 100%,18px 100%,0 calc(100% - 18px),0 15px);
+  box-shadow:0 30px 70px rgba(0,0,0,.48)
+}
+.card::before,.story::before{
+  content:"";position:absolute;top:0;left:0;width:46%;height:3px;
+  background:linear-gradient(90deg,var(--toxic),var(--cyan),transparent);box-shadow:0 0 15px var(--toxic)
+}
+.card::after,.story::after{
+  content:"";position:absolute;bottom:0;right:0;width:36%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--violet));box-shadow:0 0 14px var(--violet)
+}
+.story{text-align:left;border-left:3px solid var(--violet)}
+.card h2,.story h2{
+  margin:8px 0 13px;font-family:Arial Black,Arial,sans-serif;font-style:italic;
+  font-size:clamp(1.75rem,7vw,3rem);letter-spacing:-.04em;color:#f1ffff
+}
+.card p,.story p{line-height:1.65;color:#cbded9}
+.story p{margin:0}.story p+p{margin-top:14px}
+.realMission{
+  margin:19px auto 0;max-width:590px;padding:18px 17px;text-align:left;
+  border-top:2px solid var(--toxic);border-bottom:2px solid var(--cyan);background:rgba(0,0,0,.22)
+}
+.realMission strong{color:var(--toxic2);text-shadow:0 0 8px rgba(121,255,56,.35)}
+.realMission ol,.realMission ul{padding-left:20px;line-height:1.6;color:#d0e1dd}
+.joke{margin-top:13px;color:#d2b5ff;font-size:.79rem;font-style:italic}
+.countdown{
+  margin:20px 0;font-family:Arial Black,Arial,sans-serif;font-size:clamp(4rem,18vw,9rem);line-height:1;
+  color:var(--toxic);text-shadow:3px 0 var(--cyan),-3px 0 var(--violet),0 0 28px rgba(121,255,56,.65);
+  animation:countdownPulse .9s ease-in-out infinite alternate
+}
+@keyframes countdownPulse{to{transform:scale(1.05);filter:brightness(1.25)}}
+.timerBar{height:10px;max-width:500px;margin:16px auto;background:rgba(255,255,255,.07);border:1px solid rgba(121,255,56,.15);overflow:hidden}
+.timerFill{height:100%;width:100%;background:linear-gradient(90deg,var(--violet),var(--cyan),var(--toxic));box-shadow:0 0 15px var(--toxic)}
+.emerald{
+  width:95px;height:126px;margin:19px auto 14px;
+  clip-path:polygon(50% 0,88% 22%,100% 60%,50% 100%,0 60%,12% 22%);
+  animation:emeraldFloat 1.4s ease-in-out infinite alternate
+}
+.emerald.green{background:linear-gradient(135deg,#efffe9 0 8%,#9dff55 22%,#3bdf3d 60%,#0b772b);box-shadow:0 0 12px #fff,0 0 35px var(--toxic),0 0 80px rgba(121,255,56,.4)}
+.emerald.cyan{background:linear-gradient(135deg,#f1ffff 0 8%,#81f8ff 23%,#20d8eb 60%,#08798d);box-shadow:0 0 12px #fff,0 0 35px var(--cyan),0 0 80px rgba(49,237,255,.38)}
+@keyframes emeraldFloat{to{transform:translateY(-10px) rotate(3deg) scale(1.03)}}
+.signal{margin:21px auto 0;max-width:540px;text-align:left}
+.signalRow{display:flex;justify-content:space-between;font-size:.67rem;letter-spacing:.11em;font-weight:1000;color:#cffff1}
+.signalBar{height:18px;margin-top:8px;background:#020606;border:1px solid rgba(121,255,56,.25);padding:2px}
+.signalFill{
+  height:100%;width:84%;background:repeating-linear-gradient(90deg,#33a849 0 14px,#7cff56 14px 27px,#c9ff80 27px 38px);
+  box-shadow:0 0 16px var(--toxic);animation:signalPulse .6s ease-in-out infinite alternate
+}
+@keyframes signalPulse{to{filter:brightness(1.55);width:96%}}
+.challengeBox{max-width:590px;margin:19px auto 0;padding:21px;border:1px solid rgba(121,255,56,.2);background:rgba(0,7,9,.68)}
+.challengeName{margin:8px 0;font-family:Arial Black,Arial,sans-serif;font-style:italic;font-size:clamp(1.5rem,6vw,2.5rem);color:var(--toxic);text-shadow:0 0 14px rgba(121,255,56,.35)}
+.challengeText{line-height:1.58;color:#d2e3df}
+.shadowCommand{
+  max-width:700px;margin:23px auto;font-family:Arial Black,Arial,sans-serif;font-style:italic;
+  font-size:clamp(2rem,8vw,4.1rem);line-height:1.02;color:#f2ffff;text-shadow:2px 0 var(--red),-2px 0 var(--cyan)
+}
+.commandCount{font-size:.68rem;letter-spacing:.13em;color:#96ada7;font-weight:1000}
 .shadowButtons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.yes{background:linear-gradient(#7fd697,#4b9762)}
-.no{background:linear-gradient(#dd747b,#985058)}
-
-/* chaos */
-.roleBadge{display:inline-block;margin-top:12px;padding:7px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.15);font-size:.64rem;letter-spacing:.12em;font-weight:1000}
-.chaosControls{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:520px;margin:20px auto}
-.ctrl{padding:18px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:#1d2534;color:#fff;font-size:1.2rem}
+.yes{background:linear-gradient(#a3ff58,#4bb83b)}
+.no{background:linear-gradient(#ff6982,#a32648);color:#fff}
+.sequenceDisplay{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.seq{
+  width:48px;height:48px;display:grid;place-items:center;border:1px solid rgba(49,237,255,.2);
+  background:rgba(0,20,25,.5);font-weight:1000;color:#a8c2be;transform:skewX(-8deg)
+}
+.seq.done{color:#03120a;background:var(--toxic);border-color:#fff;box-shadow:0 0 18px var(--toxic)}
+.chaosControls{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;max-width:530px;margin:21px auto}
+.ctrl{
+  min-height:70px;padding:18px 10px;border:1px solid rgba(49,237,255,.32);
+  background:linear-gradient(#0b2730,#041116);color:var(--cyan2);font-size:1.35rem;font-weight:1000
+}
+.ctrl:active{background:var(--toxic);color:#021007;box-shadow:0 0 20px var(--toxic)}
 .ctrl.hold{grid-column:1/4}
-.sequenceDisplay{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px}
-.seq{padding:8px 11px;border-radius:8px;background:rgba(255,255,255,.07);font-size:.75rem;font-weight:1000;color:#b9c5d1}
-.seq.done{background:rgba(86,155,101,.3);color:#a9e7b7}
-.finalLocation{margin:22px auto 0;max-width:540px;padding:18px 16px;background:#dfe6eb;color:#10151c;text-align:left;border-left:5px solid var(--violet)}
-.finalLocation small{font-size:.61rem;letter-spacing:.17em;color:#68737f;font-weight:1000}
-.finalLocation strong{display:block;margin-top:7px;font-size:clamp(1.25rem,5vw,2rem)}
-.flashScreen{position:absolute;inset:0;z-index:100;background:#fff;opacity:0;pointer-events:none}.flashScreen.hit{animation:f .45s ease}
-@keyframes f{0%{opacity:0}12%{opacity:1}35%{opacity:.1}60%{opacity:.55}100%{opacity:0}}
-@media(max-width:520px){.emeraldCounter{right:64px;font-size:.49rem}}
+.status{min-height:26px;margin-top:13px;font-size:.71rem;letter-spacing:.08em;font-weight:1000;color:#d6e6e3}
+.finalLocation{margin:23px auto 0;max-width:540px;padding:18px 17px;background:#e5fff6;color:#04100d;text-align:left;border-left:6px solid var(--toxic)}
+.finalLocation small{font-size:.6rem;letter-spacing:.18em;color:#5c746d;font-weight:1000}
+.finalLocation strong{display:block;margin-top:8px;font-family:Arial Black,Arial,sans-serif;font-style:italic;font-size:clamp(1.3rem,5vw,2rem)}
+
+/* MEPHILES REFLEX GAME */
+.glitchArena{
+  position:relative;max-width:610px;height:320px;margin:20px auto 0;overflow:hidden;
+  border:1px solid rgba(49,237,255,.22);
+  background:
+    linear-gradient(rgba(121,255,56,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(49,237,255,.035) 1px,transparent 1px),
+    radial-gradient(circle at center,rgba(163,76,255,.12),transparent 60%),
+    #02090c;
+  background-size:34px 34px,34px 34px,auto,auto
+}
+.glitchOrb{
+  position:absolute;width:74px;height:74px;border-radius:50%;
+  border:2px solid #fff;display:none;place-items:center;font-weight:1000;
+  user-select:none;transform:translate(-50%,-50%);
+}
+.glitchOrb.real{
+  display:grid;background:radial-gradient(circle,#efffcf 0 10%,var(--toxic) 40%,#167b28 75%);
+  box-shadow:0 0 15px #fff,0 0 35px var(--toxic),0 0 70px rgba(121,255,56,.5);
+  animation:orbPulse .36s ease-in-out infinite alternate
+}
+.glitchOrb.fake{
+  display:grid;background:radial-gradient(circle,#f6dcff 0 8%,var(--violet) 40%,#4f0b75 75%);
+  box-shadow:0 0 15px #fff,0 0 35px var(--violet),0 0 70px rgba(163,76,255,.5);
+  animation:fakeGlitch .18s steps(2) infinite
+}
+@keyframes orbPulse{to{transform:translate(-50%,-50%) scale(1.12)}}
+@keyframes fakeGlitch{
+  0%{transform:translate(-50%,-50%) translateX(-3px)}
+  50%{transform:translate(-50%,-50%) translateX(4px)}
+  100%{transform:translate(-50%,-50%) translateX(-1px)}
+}
+.reflexMeta{display:flex;justify-content:space-between;max-width:610px;margin:14px auto 0;font-size:.66rem;letter-spacing:.1em;font-weight:1000;color:#cbdfda}
+
+/* FAIL OVERLAY */
+.failOverlay{
+  position:absolute;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;
+  padding:18px;background:rgba(0,3,5,.94);opacity:0;pointer-events:none;
+  transition:opacity .24s ease
+}
+.failOverlay.show{opacity:1;pointer-events:auto}
+.failCard{
+  width:min(580px,100%);padding:34px 22px;text-align:center;
+  background:radial-gradient(circle at 50% 0,rgba(255,56,92,.13),transparent 50%),#05090d;
+  border:1px solid rgba(255,56,92,.5);
+  box-shadow:0 0 45px rgba(255,56,92,.16),0 0 80px rgba(163,76,255,.1);
+  animation:failGlitch .4s steps(2) infinite alternate
+}
+@keyframes failGlitch{
+  0%{transform:translateX(-2px)}
+  50%{transform:translateX(3px)}
+  100%{transform:translateX(0)}
+}
+.failTitle{
+  font-family:Arial Black,Arial,sans-serif;font-size:clamp(2.3rem,10vw,5rem);font-style:italic;
+  line-height:.9;color:#fff;text-shadow:4px 0 var(--red),-4px 0 var(--cyan),0 0 25px rgba(255,56,92,.5)
+}
+.failText{margin-top:15px;color:#d8dfe2;line-height:1.5}
+.retryBtn{
+  margin-top:22px;padding:14px 24px;min-height:52px;border:1px solid #ff99aa;
+  background:linear-gradient(#ff6680,#a52047);color:#fff;font-weight:1000;letter-spacing:.12em;text-transform:uppercase
+}
+
+@media(max-width:520px){
+  .emeraldCounter{right:64px;top:calc(22px + env(safe-area-inset-top));font-size:.46rem}
+  .brand{font-size:.51rem;padding:7px 8px}
+  .screen{padding-left:10px;padding-right:10px}
+  .card,.story{padding:23px 15px}
+  .hero{font-size:clamp(2.4rem,13vw,4.5rem)}
+  .chaosControls{gap:8px}.ctrl{min-height:65px}
+  .shadowButtons{flex-direction:column}.shadowButtons button{width:100%}
+  .glitchArena{height:300px}
+}
 </style>
 </head>
+
 <body>
 <div id="app">
-<div class="grid"></div><div class="scan"></div><div class="progress" id="progress"></div><div class="flashScreen" id="flashScreen"></div>
-<div class="topbar"><div class="brand">SONIC DAY // <b>FRACTURED TIME</b></div><button class="sound" id="soundBtn">🔊</button></div>
-<div class="emeraldCounter" id="emeraldCounter">CHAOS EMERALDS ◆ 1 / 7</div>
+  <div class="world">
+    <div class="grid"></div><div class="horizon"></div>
+    <div class="fracture f1"></div><div class="fracture f2"></div><div class="fracture f3"></div>
+    <div class="particles"></div>
+    <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+  </div>
+  <div class="scan"></div><div class="scanBar"></div>
+  <div class="transitionFlash" id="transitionFlash"></div>
+  <div class="flashScreen" id="flashScreen"></div>
+  <div class="chaosBlast" id="chaosBlast"></div>
+  <div class="progress" id="progress"></div>
 
-<section class="screen active" id="s0"><div class="wrap"><div class="kicker">Mission 05 // Major Chapter</div><h1 class="hero">Fractured <em>Time</em></h1><div class="sub">Silver. Shadow. Mephiles. Chaos Control.</div><button class="primary" id="startBtn">BEGIN CHAPTER</button></div></section>
+  <div class="topbar">
+    <div class="brand">SONIC DAY // <b>FRACTURED TIME</b></div>
+    <button class="sound" id="soundBtn" type="button">🔊</button>
+  </div>
+  <div class="emeraldCounter" id="emeraldCounter">CHAOS EMERALDS ◆ 1 / 7</div>
 
-<section class="screen" id="s1"><div class="wrap"><div class="story"><div class="kicker">Sonic Episode</div><h2>A stranger from the future.</h2><p>After Dusty Desert, Silver confronts Sonic, convinced that Sonic is the “Iblis Trigger.” Eggman uses the chaos to capture Elise again while Amy interrupts Silver.</p><button class="primary" data-next="2">SILVER ATTACK</button></div></div></section>
+  <section class="screen active" id="s0"><div class="wrap">
+    <div class="kicker">MAJOR CHAPTER // TIMELINE CORRUPTION DETECTED</div>
+    <h1 class="hero">Fractured <em>Time</em></h1>
+    <div class="sub">SILVER // SHADOW // MEPHILES // CHAOS CONTROL</div>
+    <button class="primary" id="startBtn" type="button">BEGIN CHAPTER</button>
+  </div></section>
 
-<section class="screen" id="s2"><div class="wrap"><div class="card"><div class="kicker">Silver // Mind Read</div><h2>Don't let him read your mind.</h2><p>Think of <strong>any object you can see around you right now.</strong> Do not say it out loud.</p><div class="countdown" id="mindCountdown">10</div><div class="timerBar"><div class="timerFill" id="mindBar"></div></div><p>Game Master gets exactly <strong>3 yes/no questions</strong> to guess it.</p><button class="primary" id="mindStart">START 10 SECONDS</button></div></div></section>
+  <section class="screen" id="s1"><div class="wrap"><div class="story">
+    <div class="kicker">SONIC EPISODE // CASTLE TOWN</div>
+    <h2>A stranger from a ruined future.</h2>
+    <p>Sonic's escape from Dusty Desert does not last long. Princess Elise is with him again, but another threat has entered the present — one that has nothing to do with Eggman.</p>
+    <p>Silver the Hedgehog has travelled from a devastated future. In his time, the world has been consumed by <strong>Iblis</strong>. Silver believes one person in the past caused that catastrophe.</p>
+    <p>Mephiles has given him a name: <strong>the Iblis Trigger.</strong> Silver has been led to believe that person is Sonic.</p>
+    <p>Silver attacks before Sonic can understand what is happening. During the confrontation, Eggman takes advantage of the chaos and captures Elise once again.</p>
+    <button class="primary" data-next="2" type="button">SILVER ATTACK</button>
+  </div></div></section>
 
-<section class="screen" id="s3"><div class="wrap"><div class="card"><div class="kicker">Mind Read Result</div><h2>Did the Game Master guess it?</h2><div class="shadowButtons"><button class="primary yes" id="mindYes">YES 😎</button><button class="primary no" id="mindNo">NO 💀</button></div><div class="status" id="mindResult"></div></div></div></section>
+  <section class="screen" id="s2"><div class="wrap"><div class="card">
+    <div class="kicker">SILVER // PSYCHIC INTERFERENCE</div>
+    <h2>Don't let him read your mind.</h2>
+    <p>Think of <strong>any object you can see around you right now.</strong><br><br>Do not say it out loud.</p>
+    <div class="countdown" id="mindCountdown">10</div>
+    <div class="timerBar"><div class="timerFill" id="mindBar"></div></div>
+    <p>Game Master gets exactly <strong>3 yes/no questions</strong> to identify it.</p>
+    <button class="primary" id="mindStart" type="button">START 10 SECONDS</button>
+  </div></div></section>
 
-<section class="screen" id="s4"><div class="wrap"><div class="card"><div class="kicker">Silver // Psychokinesis Calibration</div><h2>Move an object without touching it.</h2><p>Select any small object on the table.</p><div class="realMission"><strong>RULES</strong><ol><li>PLAYER may not touch the object.</li><li>GAME MASTER becomes the “psychokinetic force.”</li><li>Player may only command: left, right, forward, back, lift, drop.</li><li>Game Master must follow commands as literally as possible.</li><li>Move the object roughly 30 cm to a chosen target.</li></ol></div><div class="joke">Silver insists this is scientifically identical to telekinesis.</div><button class="primary" data-next="5">OBJECT MOVED</button></div></div></section>
+  <section class="screen" id="s3"><div class="wrap"><div class="card">
+    <div class="kicker">SILVER // MIND READ RESULT</div>
+    <h2>Did the Game Master guess it?</h2>
+    <div class="shadowButtons">
+      <button class="primary yes" id="mindYes" type="button">YES 😎</button>
+      <button class="danger no" id="mindNo" type="button">NO 💀</button>
+    </div>
+    <div class="status" id="mindResult"></div>
+  </div></div></section>
 
-<section class="screen" id="s5"><div class="wrap"><div class="story"><div class="kicker">White Acropolis // Eggman's Trap</div><h2>Two hundred years forward.</h2><p>Sonic, Tails and Knuckles fall into Eggman's trap and are sent two hundred years into the ruined future.</p><button class="primary" data-next="6">ENTER CRISIS CITY</button></div></div></section>
+  <section class="screen" id="s4"><div class="wrap"><div class="card">
+    <div class="kicker">SILVER // PSYCHOKINESIS CALIBRATION</div>
+    <h2>Move it without touching it.</h2>
+    <p>Silver manipulates objects without physically touching them. You obviously cannot do that. So we're going to cheat.</p>
+    <div class="realMission"><strong>REAL-LIFE TELEKINESIS PROTOCOL</strong><ol>
+      <li>Choose a small object nearby.</li><li>The player may not touch it.</li>
+      <li>Game Master becomes the “psychokinetic force.”</li>
+      <li>Player may only command: left, right, forward, back, lift and drop.</li>
+      <li>Guide the object roughly 30 cm to a chosen destination.</li>
+    </ol></div>
+    <div class="joke">Silver confirms this is absolutely how telekinesis works.</div>
+    <button class="primary" data-next="5" type="button">OBJECT MOVED</button>
+  </div></div></section>
 
-<section class="screen" id="s6"><div class="wrap"><div class="card"><div class="kicker">Real Life // Crisis City Communication</div><h2>Headphone Disaster</h2><p>The future communication network is completely broken.</p><div class="realMission"><strong>5 ROUNDS</strong><ol><li>Player puts headphones on with music playing.</li><li>Game Master reads the sentence shown on screen.</li><li>Player lip-reads and guesses.</li><li>Press NEXT SENTENCE after each try.</li></ol></div><div class="challengeBox"><div class="challengeName" id="lipSentence">Shadow secretly owns pink Crocs.</div></div><div class="status" id="lipCount">ROUND 1 / 5</div><button class="primary" id="lipNext">NEXT SENTENCE</button></div></div></section>
+  <section class="screen" id="s5"><div class="wrap"><div class="story">
+    <div class="kicker">WHITE ACROPOLIS // EGGMAN'S TRAP</div>
+    <h2>Two hundred years forward.</h2>
+    <p>Sonic later reunites with Tails and Knuckles. Together they pursue Eggman, but the confrontation is a trap.</p>
+    <p>Eggman's machine tears open space-time and throws the three of them approximately <strong>two hundred years into the future.</strong></p>
+    <p>The world they arrive in is nearly unrecognizable. Cities are destroyed, fire has consumed the landscape, and Iblis continues to devastate what remains.</p>
+    <p>This is the future Silver has been trying to prevent.</p>
+    <button class="primary" data-next="6" type="button">ENTER CRISIS CITY</button>
+  </div></div></section>
 
-<section class="screen" id="s7"><div class="wrap"><div class="story"><div class="kicker">Crisis City</div><h2>Chaos energy detected.</h2><p>Sonic's group meets Shadow and Rouge in the devastated future. They need Chaos Emeralds to open a time-space rift.</p><div class="signal"><div class="signalRow"><span>CHAOS SIGNAL</span><span>VERY CLOSE</span></div><div class="signalBar"><div class="signalFill"></div></div></div><button class="primary" data-next="8">LOCATE SIGNAL</button></div></div></section>
+  <section class="screen" id="s6"><div class="wrap"><div class="card">
+    <div class="kicker">CRISIS CITY // COMMUNICATION FAILURE</div>
+    <h2>Headphone Disaster</h2>
+    <p>The future communication network is completely destroyed. Congratulations. You now have to communicate like idiots.</p>
+    <div class="realMission"><strong>5 ROUNDS</strong><ol>
+      <li>Player puts headphones on with music playing.</li>
+      <li>Game Master reads the sentence on screen.</li>
+      <li>Player must lip-read and guess the sentence.</li>
+      <li>Move to the next transmission after every attempt.</li>
+    </ol></div>
+    <div class="challengeBox"><div class="challengeName" id="lipSentence">Shadow secretly owns pink Crocs.</div></div>
+    <div class="status" id="lipCount">ROUND 1 / 5</div>
+    <button class="primary" id="lipNext" type="button">NEXT TRANSMISSION</button>
+  </div></div></section>
 
-<section class="screen" id="s8"><div class="wrap"><div class="card"><div class="kicker">Physical Search Mission</div><h2>Find the Green Emerald.</h2><p>The signal is not inside the phone.</p><div class="realMission"><strong>SEARCH RULE</strong><p style="margin-bottom:0">Search something the Game Master is carrying. The emerald is hidden somewhere very close.</p></div><div class="joke">No, eating the Game Master's snacks does not count as searching.</div><button class="primary" data-next="9">I FOUND SOMETHING</button></div></div></section>
+  <section class="screen" id="s7"><div class="wrap"><div class="story">
+    <div class="kicker">CRISIS CITY // SHADOW & ROUGE</div>
+    <h2>Chaos energy detected.</h2>
+    <p>Inside the ruined future, Sonic's group encounters Shadow and Rouge, who have also been stranded in this era.</p>
+    <p>There is no normal path home. Their only chance is to use the power of <strong>two Chaos Emeralds</strong> to create a space-time rift through Chaos Control.</p>
+    <p>A nearby energy signature begins to respond.</p>
+    <div class="signal"><div class="signalRow"><span>CHAOS SIGNAL</span><span>VERY CLOSE</span></div><div class="signalBar"><div class="signalFill"></div></div></div>
+    <button class="primary" data-next="8" type="button">LOCATE SIGNAL</button>
+  </div></div></section>
 
-<section class="screen" id="s9"><div class="wrap"><div class="card"><div class="kicker">Chaos Emerald Recovered</div><div class="emerald green"></div><h2>GREEN CHAOS EMERALD</h2><p>Physical collection updated.</p><button class="primary" id="greenClaim">EMERALD SECURED</button></div></div></section>
+  <section class="screen" id="s8"><div class="wrap"><div class="card">
+    <div class="kicker">PHYSICAL SEARCH // CHAOS SIGNAL</div>
+    <h2>Find the Green Emerald.</h2>
+    <p>The signal isn't coming from the phone.</p>
+    <div class="realMission"><strong>SEARCH DIRECTIVE</strong><p style="margin-bottom:0">Search something the Game Master is carrying.<br><br>The Chaos Emerald is hidden somewhere extremely close.</p></div>
+    <div class="joke">Eating the Game Master's snacks does not count as “searching his inventory.”</div>
+    <button class="primary" data-next="9" type="button">I FOUND SOMETHING</button>
+  </div></div></section>
 
-<section class="screen" id="s10"><div class="wrap"><div class="story"><div class="kicker">Mephiles // Deception</div><h2>Can you tell when reality is wrong?</h2><p>Mephiles manipulates people by twisting the truth. This time, he gets one chance to manipulate your timeline.</p><button class="primary" data-next="11">BEGIN TRUST TEST</button></div></div></section>
+  <section class="screen" id="s9"><div class="wrap"><div class="card">
+    <div class="kicker">CHAOS ENERGY CONFIRMED</div><div class="emerald green"></div>
+    <h2>GREEN CHAOS EMERALD</h2>
+    <p>The Emerald reacts to the distortion in the timeline.<br><br>Physical collection updated.</p>
+    <button class="primary" id="greenClaim" type="button">EMERALD SECURED</button>
+  </div></div></section>
 
-<section class="screen" id="s11"><div class="wrap"><div class="card"><div class="kicker">GAME MASTER ONLY</div><div class="secret"><h3>DO NOT LET THE PLAYER SEE THIS SCREEN</h3><p>Think of <strong>three statements about your relationship / memories.</strong><br><br>Exactly <strong>ONE</strong> must be a lie.<br><br>When ready, turn the phone back toward the player.</p></div><button class="primary" data-next="12">I'M READY — HIDE THIS</button></div></div></section>
+  <!-- NEW MEPHILES GAME -->
+  <section class="screen" id="s10"><div class="wrap"><div class="story">
+    <div class="kicker">MELPHILES // FALSE SIGNAL</div>
+    <h2>The timeline is filling with decoys.</h2>
+    <p>Mephiles does not need to overpower Silver directly. He only needs to make the wrong path look convincing.</p>
+    <p>Now the timeline is producing false Chaos signatures. <strong>Green signals are real. Purple signals belong to Mephiles.</strong></p>
+    <p>Lock onto eight real signals before the timeline destabilizes. Three mistakes and Mephiles wins this round.</p>
+    <button class="primary" data-next="11" type="button">ENTER THE GLITCH</button>
+  </div></div></section>
 
-<section class="screen" id="s12"><div class="wrap"><div class="card"><div class="kicker">Mephiles // Trust Test</div><h2>One statement is false.</h2><p>Game Master will now say three statements. Identify the lie.</p><div class="realMission"><strong>PLAYER:</strong><p>Listen carefully. You get one final answer.</p></div><div class="shadowButtons"><button class="primary" id="lieCorrect">I FOUND THE LIE</button><button class="ghost" id="lieFailed">I WAS FOOLED</button></div><div class="status" id="lieStatus"></div></div></div></section>
+  <section class="screen" id="s11"><div class="wrap"><div class="card">
+    <div class="kicker">MEPHILES // TIMELINE GLITCH REFLEX</div>
+    <h2>Hit the real signal.</h2>
+    <p>Tap <strong style="color:var(--toxic)">GREEN</strong>. Never tap <strong style="color:var(--violet2)">PURPLE</strong>. If a real signal disappears before you hit it, that also counts as damage.</p>
+    <div class="reflexMeta"><span id="reflexHits">SIGNALS 0 / 8</span><span id="reflexDamage">DAMAGE 0 / 3</span></div>
+    <div class="glitchArena" id="glitchArena"><button class="glitchOrb" id="glitchOrb" type="button">◆</button></div>
+    <div class="status" id="reflexStatus">PRESS START</div>
+    <button class="primary" id="reflexStart" type="button">START GLITCH</button>
+  </div></div></section>
 
-<section class="screen" id="s13"><div class="wrap"><div class="card"><div class="kicker">Chaos Energy Challenge</div><h2>You don't earn this one alone.</h2><p>Challenge the Game Master. The system will choose your task.</p><div class="challengeBox"><div class="challengeName" id="gmChallenge">???</div><div class="challengeText" id="gmChallengeText">Press RANDOMIZE.</div></div><button class="primary" id="randomChallenge">RANDOMIZE</button><button class="ghost" id="challengeDone" style="display:none">CHALLENGE COMPLETE</button></div></div></section>
+  <section class="screen" id="s12"><div class="wrap"><div class="card">
+    <div class="kicker">CHAOS ENERGY </div>
+    <h2>You don't earn this one alone.</h2>
+    <p>The next Emerald requires two compatible energy signatures.<br><br>Unfortunately, that means you have to challenge the Game Master.</p>
+    <div class="challengeBox"><div class="challengeName" id="gmChallenge">???</div><div class="challengeText" id="gmChallengeText">Press RANDOMIZE.</div></div>
+    <button class="primary" id="randomChallenge" type="button">RANDOMIZE</button>
+    <button class="ghost" id="challengeDone" type="button" style="display:none">CHALLENGE COMPLETE</button>
+  </div></div></section>
 
-<section class="screen" id="s14"><div class="wrap"><div class="card"><div class="kicker">Chaos Emerald Recovered</div><div class="emerald cyan"></div><h2>TURQUOISE CHAOS EMERALD</h2><p>Ask the Game Master for the physical crystal.</p><button class="primary" id="cyanClaim">EMERALD SECURED</button></div></div></section>
+  <section class="screen" id="s13"><div class="wrap"><div class="card">
+    <div class="kicker">CHAOS ENERGY CONFIRMED</div><div class="emerald cyan"></div>
+    <h2>TURQUOISE CHAOS EMERALD</h2>
+    <p>A second energy signature has stabilized.<br><br>Ask the Game Master for the physical crystal.</p>
+    <button class="primary" id="cyanClaim" type="button">EMERALD SECURED</button>
+  </div></div></section>
 
-<section class="screen" id="s15"><div class="wrap"><div class="story"><div class="kicker">Shadow Episode</div><h2>Mephiles lied.</h2><p>Shadow confronts Silver and reveals that Mephiles has been manipulating his mission. Silver's certainty begins to collapse.</p><button class="primary" data-next="16">SHADOW SAYS</button></div></div></section>
+  <section class="screen" id="s14"><div class="wrap"><div class="story">
+    <div class="kicker">SHADOW EPISODE </div>
+    <h2>Mephiles lied.</h2>
+    <p>Shadow confronts Silver and challenges the story Mephiles has been feeding him.</p>
+    <p>Silver begins to realize that the future he is trying to save may have pushed him into exactly the role Mephiles wanted him to play</p>
+    <p>Instead of blindly following another command, Silver finally starts questioning the source.</p>
+    <button class="primary" data-next="15" type="button">SHADOW SAYS</button>
+  </div></div></section>
 
-<section class="screen" id="s16"><div class="wrap"><div class="card"><div class="kicker">Shadow // Command Test</div><h2>SHADOW SAYS</h2><p>Do the command only if it starts with <strong>SHADOW SAYS</strong>.</p><div class="commandCount" id="commandCount">COMMAND 1 / 7</div><div class="shadowCommand" id="shadowCommand">Ready?</div><div class="shadowButtons"><button class="primary yes" id="didIt">I DID IT</button><button class="primary no" id="didnt">I DIDN'T</button></div><div class="status" id="shadowStatus"></div><button class="primary" id="shadowStart">START</button></div></div></section>
+  <section class="screen" id="s15"><div class="wrap"><div class="card">
+    <div class="kicker">SHADOW </div>
+    <h2>SHADOW SAYS</h2>
+    <p>Only follow a command if it begins with <strong>SHADOW SAYS.</strong></p>
+    <div class="commandCount" id="commandCount">COMMAND 1 / 7</div>
+    <div class="shadowCommand" id="shadowCommand">Ready?</div>
+    <div class="shadowButtons">
+      <button class="primary yes" id="didIt" type="button">I DID IT</button>
+      <button class="danger no" id="didnt" type="button">I DIDN'T</button>
+    </div>
+    <div class="status" id="shadowStatus"></div>
+    <button class="primary" id="shadowStart" type="button">START</button>
+  </div></div></section>
 
-<section class="screen" id="s17"><div class="wrap"><div class="card"><div class="kicker">Chaos Control // Game Master Role</div><h2>Memorize this.</h2><div class="secret"><h3>GAME MASTER ONLY</h3><p style="font-size:1.25rem"><strong>LEFT → RIGHT → HOLD → TAP TAP</strong></p><p>You may NOT say: left, right, hold, tap.</p></div><button class="primary" data-next="18">I MEMORIZED IT — HIDE</button></div></div></section>
+  <section class="screen" id="s16"><div class="wrap"><div class="card">
+    <div class="kicker">CHAOS CONTROL // GAME MASTER</div>
+    <h2>Memorize this sequence.</h2>
+    <div class="realMission"><strong>GAME MASTER ONLY</strong><p style="font-size:1.25rem"><strong>LEFT → RIGHT → HOLD → TAP TAP</strong></p><p>You may NOT say: <strong>left, right, hold, tap.</strong></p></div>
+    <button class="primary" data-next="17" type="button">I MEMORIZED IT — HIDE</button>
+  </div></div></section>
 
-<section class="screen" id="s18"><div class="wrap"><div class="card"><div class="kicker">Chaos Control // Player</div><h2>Synchronize.</h2><p>Game Master must guide you without using the forbidden words.</p><div class="sequenceDisplay"><span class="seq" id="seq0">1</span><span class="seq" id="seq1">2</span><span class="seq" id="seq2">3</span><span class="seq" id="seq3">4</span></div><div class="chaosControls"><button class="ctrl" data-act="L">◀</button><button class="ctrl" data-act="T">●</button><button class="ctrl" data-act="R">▶</button><button class="ctrl hold" data-act="H">HOLD</button></div><div class="status" id="chaosStatus">0 / 4 synchronized</div><div class="joke">Forbidden words: left, right, hold, tap.</div></div></div></section>
+  <section class="screen" id="s17"><div class="wrap"><div class="card">
+    <div class="kicker">CHAOS CONTROL // SYNCHRONIZATION</div>
+    <h2>Synchronize the Emeralds.</h2>
+    <p>The two Chaos Emeralds begin resonating.<br><br>Game Master knows the activation sequence. They must guide you without speaking any forbidden words.</p>
+    <div class="sequenceDisplay"><span class="seq" id="seq0">1</span><span class="seq" id="seq1">2</span><span class="seq" id="seq2">3</span><span class="seq" id="seq3">4</span></div>
+    <div class="chaosControls">
+      <button class="ctrl" data-act="L" type="button">◀</button>
+      <button class="ctrl" data-act="T" type="button">●</button>
+      <button class="ctrl" data-act="R" type="button">▶</button>
+      <button class="ctrl hold" data-act="H" type="button">HOLD</button>
+    </div>
+    <div class="status" id="chaosStatus">0 / 4 SYNCHRONIZED</div>
+    <div class="joke">Forbidden words: left, right, hold, tap.</div>
+  </div></div></section>
 
-<section class="screen" id="s19"><div class="wrap"><div class="story"><div class="kicker">Ten Years Ago // Solaris Project</div><h2>The truth.</h2><p>Shadow and Silver use Chaos Control to reach the past. They witness the Solaris Project fail and Solaris split into Iblis and Mephiles.</p><p>Silver finally understands that Sonic was never the cause of his ruined future. Mephiles manipulated him.</p><p style="color:#8fe3ec;font-weight:1000">CHAOS EMERALDS // 3 OF 7</p><button class="primary" data-next="20">CONTINUE</button></div></div></section>
+  <section class="screen" id="s18"><div class="wrap"><div class="story">
+    <div class="kicker">TEN YEARS AGO.. SOLARIS PROJECT</div>
+    <h2>The origin of the disaster.</h2>
+    <p>Shadow and Silver use Chaos Control to tear open a portal through time. Instead of returning directly to the present, they travel ten years into Elise's past.</p>
+    <p>There they witness the event at the center of everything: the <strong>Birthday Elise Project.</strong></p>
+    <p>Silver finally understands. Sonic was ADAM ADAM.</p>
+    <p style="color:var(--toxic2);font-weight:1000">CHAOS EMERALDS // 3 OF 7</p>
+    <button class="primary" data-next="19" type="button">RETURN TO THE TIMELINE</button>
+  </div></div></section>
 
-<section class="screen" id="s20"><div class="wrap"><div class="card"><div class="kicker">Mission 05 Complete</div><h2>Timeline Fractured</h2><p>Silver knows the truth. Shadow knows Mephiles' origin. Sonic's fight continues.</p><div class="finalLocation"><small>NEXT LOCATION</small><strong>NEXT PLACE NAME</strong></div><div class="sub" style="color:var(--cyan)">CHAOS EMERALDS ◆ 3 / 7</div></div></div></section>
+  <section class="screen" id="s19"><div class="wrap"><div class="card">
+    <div class="kicker">MISSION 05 COMPLETE</div>
+    <h1 class="hero" style="font-size:clamp(2.6rem,10vw,5.4rem)">Timeline <em>Fractured</em></h1>
+    <p>Silver now knows the truth.<br><br>Shadow has discovered where Mephiles came from.<br><br>But knowing the past has not repaired the timeline...</p>
+    <div class="finalLocation"><small>COAST</small><strong>Yalıncak Plajı</strong></div>
+    <div class="sub" style="color:var(--toxic)">CHAOS EMERALDS ◆ 3 / 7</div>
+  </div></div></section>
+
+  <!-- UNIVERSAL FAIL -->
+  <div class="failOverlay" id="failOverlay">
+    <div class="failCard">
+      <div class="kicker">TIMELINE FAILURE</div>
+      <div class="failTitle" id="failTitle">TEKRAR DENE MINNAK</div>
+      <div class="failText" id="failText">Timeline collapsed. Try that again.</div>
+      <button class="retryBtn" id="retryBtn" type="button">RETRY</button>
+    </div>
+  </div>
 </div>
 
 <script>
 (() => {
-const screens=[...document.querySelectorAll('.screen')],progress=document.getElementById('progress'),flash=document.getElementById('flashScreen'),emeraldCounter=document.getElementById('emeraldCounter');
-let current=0;
+const screens=[...document.querySelectorAll('.screen')];
+const progress=document.getElementById('progress');
+const flash=document.getElementById('flashScreen');
+const transitionFlash=document.getElementById('transitionFlash');
+const chaosBlast=document.getElementById('chaosBlast');
+const emeraldCounter=document.getElementById('emeraldCounter');
+const failOverlay=document.getElementById('failOverlay');
+const failTitle=document.getElementById('failTitle');
+const failText=document.getElementById('failText');
+const retryBtn=document.getElementById('retryBtn');
+
+let current=0,transitioning=false,retryCallback=null;
 
 /* AUDIO */
 let ctx=null,master=null,musicGain=null,sfxGain=null,musicTimer=null,muted=false,beat=0;
@@ -161,7 +579,7 @@ const AC=window.AudioContext||window.webkitAudioContext;
 function initAudio(){
   if(!ctx){
     ctx=new AC();master=ctx.createGain();musicGain=ctx.createGain();sfxGain=ctx.createGain();
-    master.gain.value=.78;musicGain.gain.value=.13;sfxGain.gain.value=.32;
+    master.gain.value=.78;musicGain.gain.value=.12;sfxGain.gain.value=.34;
     musicGain.connect(master);sfxGain.connect(master);master.connect(ctx.destination);
   }
   if(ctx.state==='suspended')ctx.resume();
@@ -174,36 +592,35 @@ function tone(freq,t,dur,type='sine',vol=.03,dest='music'){
 }
 function sfx(type){
   initAudio();const t=ctx.currentTime;
-  if(type==='ui'){tone(700,t,.04,'triangle',.06,'sfx');tone(980,t+.04,.05,'triangle',.05,'sfx')}
-  if(type==='good'){tone(780,t,.06,'triangle',.08,'sfx');tone(1170,t+.05,.08,'triangle',.06,'sfx')}
-  if(type==='bad'){tone(165,t,.11,'sawtooth',.07,'sfx');tone(110,t+.07,.14,'square',.05,'sfx')}
-  if(type==='emerald'){[392,523,659,880].forEach((f,i)=>tone(f,t+i*.08,.15,'sine',.07,'sfx'))}
-  if(type==='portal'){[330,494,659,988].forEach((f,i)=>tone(f,t+i*.055,.12,'triangle',.07,'sfx'))}
+  if(type==='ui'){tone(620,t,.035,'square',.05,'sfx');tone(920,t+.035,.06,'triangle',.045,'sfx')}
+  if(type==='good'){tone(740,t,.06,'triangle',.08,'sfx');tone(1110,t+.05,.08,'triangle',.065,'sfx')}
+  if(type==='bad'){tone(165,t,.11,'sawtooth',.08,'sfx');tone(95,t+.07,.16,'square',.05,'sfx')}
+  if(type==='emerald'){[392,523,659,880,1175].forEach((f,i)=>tone(f,t+i*.065,.17,'sine',.075,'sfx'))}
+  if(type==='portal'){[220,330,494,659,988,1318].forEach((f,i)=>tone(f,t+i*.045,.13,'triangle',.07,'sfx'))}
+  if(type==='glitch'){tone(72,t,.08,'sawtooth',.05,'sfx');tone(1400,t+.025,.03,'square',.02,'sfx')}
 }
 function setMusic(mode){
   initAudio();if(musicTimer)clearInterval(musicTimer);beat=0;
   const modes={
-    silver:{notes:[247,311,370,415,370,311,277,330],speed:175,type:'square',vol:.023},
-    goofy:{notes:[262,330,392,523,440,392,330,294],speed:205,type:'triangle',vol:.024},
-    future:{notes:[73,82,98,110,92,82,73,65],speed:320,type:'sine',vol:.034},
-    search:{notes:[196,247,294,330,294,247,220,262],speed:230,type:'triangle',vol:.022},
-    mephiles:{notes:[98,116,147,174,147,130,116,103],speed:260,type:'sawtooth',vol:.022},
-    challenge:{notes:[220,277,330,392,349,330,294,247],speed:210,type:'triangle',vol:.023},
-    shadow:{notes:[98,147,196,220,196,174,147,123],speed:180,type:'square',vol:.023},
-    chaos:{notes:[82,123,164,247,196,164,123,98],speed:260,type:'sine',vol:.029},
-    past:{notes:[146,174,220,261,220,196,174,164],speed:360,type:'sine',vol:.025}
+    silver:{notes:[247,311,370,415,370,311,277,330],speed:175,type:'square',vol:.021},
+    goofy:{notes:[262,330,392,523,440,392,330,294],speed:205,type:'triangle',vol:.023},
+    future:{notes:[73,82,98,110,92,82,73,65],speed:320,type:'sine',vol:.032},
+    search:{notes:[196,247,294,330,294,247,220,262],speed:230,type:'triangle',vol:.021},
+    mephiles:{notes:[98,116,147,174,147,130,116,103],speed:210,type:'sawtooth',vol:.022},
+    challenge:{notes:[220,277,330,392,349,330,294,247],speed:210,type:'triangle',vol:.022},
+    shadow:{notes:[98,147,196,220,196,174,147,123],speed:180,type:'square',vol:.022},
+    chaos:{notes:[82,123,164,247,196,164,123,98],speed:245,type:'sine',vol:.028},
+    past:{notes:[146,174,220,261,220,196,174,164],speed:360,type:'sine',vol:.024}
   };
   const m=modes[mode]||modes.silver;
   function tick(){
     if(!muted){
       const t=ctx.currentTime+.02,f=m.notes[beat%m.notes.length];
       tone(f,t,mode==='past'?.32:.12,m.type,m.vol);
-      if(mode==='silver'&&beat%2===0)tone(f*2,t+.04,.06,'triangle',.012);
-      if(mode==='goofy'&&beat%2===0)tone(f*1.5,t+.07,.09,'sine',.013);
-      if(mode==='future'&&beat%3===0)tone(f*1.5,t+.08,.18,'triangle',.012);
-      if(mode==='mephiles'&&beat%2===0)tone(f/2,t+.03,.12,'sawtooth',.012);
-      if(mode==='challenge'&&beat%2===0)tone(f*1.25,t+.06,.11,'sine',.012);
-      if(mode==='chaos'&&beat%3===0)tone(f*2,t+.1,.2,'sine',.01);
+      if(mode==='silver'&&beat%2===0)tone(f*2,t+.04,.06,'triangle',.011);
+      if(mode==='future'&&beat%3===0)tone(f/2,t,.25,'sine',.012);
+      if(mode==='mephiles'&&beat%2===0)tone(f/2,t+.03,.12,'sawtooth',.011);
+      if(mode==='chaos'&&beat%3===0)tone(f*2,t+.10,.2,'sine',.01);
     }
     beat++;
   }
@@ -214,51 +631,62 @@ document.getElementById('soundBtn').addEventListener('click',()=>{
   master.gain.setTargetAtTime(muted?.0001:.78,ctx.currentTime,.03);
 });
 function flashNow(){flash.classList.remove('hit');void flash.offsetWidth;flash.classList.add('hit')}
+function chaosFX(){chaosBlast.classList.remove('go');void chaosBlast.offsetWidth;chaosBlast.classList.add('go')}
+
 function show(n){
-  screens[current].classList.remove('active');current=n;screens[current].classList.add('active');
-  progress.style.width=(current/(screens.length-1)*100)+'%';sfx('ui');
-  if(n<=4)setMusic(n===4?'goofy':'silver');
-  else if(n<=7)setMusic('future');
-  else if(n<=9)setMusic('search');
-  else if(n<=12)setMusic('mephiles');
-  else if(n<=14)setMusic('challenge');
-  else if(n<=16)setMusic('shadow');
-  else if(n<=18)setMusic('chaos');
-  else setMusic('past');
+  if(transitioning||n===current)return;
+  transitioning=true;sfx('glitch');
+  transitionFlash.classList.remove('go');void transitionFlash.offsetWidth;transitionFlash.classList.add('go');
+  setTimeout(()=>{
+    screens[current].classList.remove('active');current=n;screens[current].classList.add('active');
+    progress.style.width=(current/(screens.length-1)*100)+'%';sfx('ui');
+    if(n<=4)setMusic(n===4?'goofy':'silver');
+    else if(n<=7)setMusic('future');
+    else if(n<=9)setMusic('search');
+    else if(n<=11)setMusic('mephiles');
+    else if(n<=13)setMusic('challenge');
+    else if(n<=15)setMusic('shadow');
+    else if(n<=17)setMusic('chaos');
+    else setMusic('past');
+  },250);
+  setTimeout(()=>transitioning=false,680);
 }
 document.getElementById('startBtn').addEventListener('click',()=>{initAudio();setMusic('silver');show(1)});
 document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>show(Number(b.dataset.next))));
+
+/* FAIL SYSTEM */
+const failNames=[
+  'TEKRAR DENE MINNAK',
+  'BİR DAHA BIRTHDAY PRINCESS',
+  'OLMADI MINNAK 💀',
+  'COME ON BIRTHDAY PRINCESS'
+];
+function failGame(message,retryFn){
+  sfx('bad');retryCallback=retryFn;
+  failTitle.textContent=failNames[Math.floor(Math.random()*failNames.length)];
+  failText.textContent=message;
+  failOverlay.classList.add('show');
+}
+retryBtn.addEventListener('click',()=>{
+  failOverlay.classList.remove('show');
+  const fn=retryCallback;retryCallback=null;
+  setTimeout(()=>{if(fn)fn()},260);
+});
 
 /* MIND READ */
 let mindTimer=null;
 document.getElementById('mindStart').addEventListener('click',()=>{
   const btn=document.getElementById('mindStart'),cd=document.getElementById('mindCountdown'),bar=document.getElementById('mindBar');
-  btn.disabled=true;let n=10;cd.textContent=n;
-  bar.style.transition='none';bar.style.width='100%';
-  requestAnimationFrame(()=>{requestAnimationFrame(()=>{bar.style.transition='width 10s linear';bar.style.width='0%';});});
+  btn.disabled=true;let n=10;cd.textContent=n;bar.style.transition='none';bar.style.width='100%';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{bar.style.transition='width 10s linear';bar.style.width='0%'}));
   clearInterval(mindTimer);
-  mindTimer=setInterval(()=>{
-    n--;cd.textContent=n;
-    if(n<=0){clearInterval(mindTimer);sfx('good');setTimeout(()=>show(3),350)}
-  },1000);
+  mindTimer=setInterval(()=>{n--;cd.textContent=n;if(n<=0){clearInterval(mindTimer);sfx('good');flashNow();setTimeout(()=>show(3),300)}},1000);
 });
-document.getElementById('mindYes').addEventListener('click',()=>{
-  document.getElementById('mindResult').textContent='SILVER BLOCKED. Game Master somehow has psychic powers.';
-  sfx('good');setTimeout(()=>show(4),900);
-});
-document.getElementById('mindNo').addEventListener('click',()=>{
-  document.getElementById('mindResult').textContent="SILVER READ YOUR MIND. Unfortunately, there wasn't much there.";
-  sfx('bad');setTimeout(()=>show(4),1100);
-});
+document.getElementById('mindYes').addEventListener('click',()=>{document.getElementById('mindResult').textContent='PSYCHIC LOCK SUCCESSFUL // Game Master may actually be Silver.';sfx('good');setTimeout(()=>show(4),1000)});
+document.getElementById('mindNo').addEventListener('click',()=>{document.getElementById('mindResult').textContent="MIND READ FAILED // Silver searched your brain and found remarkably little resistance.";sfx('bad');setTimeout(()=>show(4),1200)});
 
-/* LIP READING */
-const sentences=[
-  'Shadow secretly owns pink Crocs.',
-  'Eggman broke the McFlurry machine again.',
-  'Silver still has no transit card in the future.',
-  'Sonic can actually walk. He just refuses.',
-  'Mephiles would absolutely lose at Monopoly Deal.'
-];
+/* LIP READ */
+const sentences=['Shadow secretly owns pink Crocs.','Eggman broke the McFlurry machine again.','Silver still has no transit card in the future.','Sonic can actually walk. He just refuses.','Mephiles would absolutely lose at Monopoly Deal.'];
 let lip=0;
 document.getElementById('lipNext').addEventListener('click',()=>{
   lip++;
@@ -269,26 +697,88 @@ document.getElementById('lipNext').addEventListener('click',()=>{
 
 /* GREEN */
 document.getElementById('greenClaim').addEventListener('click',()=>{
-  emeraldCounter.textContent='CHAOS EMERALDS ◆ 2 / 7';sfx('emerald');flashNow();show(10);
+  emeraldCounter.textContent='CHAOS EMERALDS ◆ 2 / 7';sfx('emerald');chaosFX();flashNow();setTimeout(()=>show(10),700)
 });
 
-/* LIE TEST */
-document.getElementById('lieCorrect').addEventListener('click',()=>{
-  document.getElementById('lieStatus').textContent='MEPHILES FAILED TO DECEIVE YOU.';
-  sfx('good');setTimeout(()=>show(13),850);
+/* MEPHILES REFLEX */
+const arena=document.getElementById('glitchArena');
+const orb=document.getElementById('glitchOrb');
+const reflexStart=document.getElementById('reflexStart');
+const reflexHits=document.getElementById('reflexHits');
+const reflexDamage=document.getElementById('reflexDamage');
+const reflexStatus=document.getElementById('reflexStatus');
+let rHits=0,rDamage=0,runningReflex=false,orbType='real',orbTimer=null,nextOrbTimer=null;
+
+function updateReflex(){
+  reflexHits.textContent='SIGNALS '+rHits+' / 8';
+  reflexDamage.textContent='DAMAGE '+rDamage+' / 3';
+}
+function hideOrb(){orb.className='glitchOrb';orb.style.display='none'}
+function scheduleOrb(){
+  if(!runningReflex)return;
+  clearTimeout(nextOrbTimer);
+  nextOrbTimer=setTimeout(spawnOrb,320+Math.random()*450);
+}
+function spawnOrb(){
+  if(!runningReflex)return;
+  hideOrb();
+  orbType=Math.random()<.68?'real':'fake';
+  const rect=arena.getBoundingClientRect();
+  const margin=52;
+  const x=margin+Math.random()*Math.max(10,rect.width-margin*2);
+  const y=margin+Math.random()*Math.max(10,rect.height-margin*2);
+  orb.style.left=x+'px';orb.style.top=y+'px';
+  orb.className='glitchOrb '+orbType;orb.style.display='grid';
+  reflexStatus.textContent=orbType==='real'?'REAL SIGNAL DETECTED':'SIGNAL CORRUPTION';
+  const life=Math.max(560,1050-rHits*45);
+  clearTimeout(orbTimer);
+  orbTimer=setTimeout(()=>{
+    if(!runningReflex)return;
+    hideOrb();
+    if(orbType==='real'){
+      rDamage++;updateReflex();sfx('bad');reflexStatus.textContent='REAL SIGNAL LOST';
+      if(rDamage>=3){loseReflex();return}
+    }
+    scheduleOrb();
+  },life);
+}
+function startReflex(){
+  clearTimeout(orbTimer);clearTimeout(nextOrbTimer);
+  rHits=0;rDamage=0;runningReflex=true;reflexStart.disabled=true;updateReflex();hideOrb();
+  reflexStatus.textContent='TIMELINE SCANNING...';setMusic('mephiles');setTimeout(spawnOrb,650);
+}
+function loseReflex(){
+  runningReflex=false;clearTimeout(orbTimer);clearTimeout(nextOrbTimer);hideOrb();reflexStart.disabled=false;
+  failGame('Mephiles flooded the timeline with false signals. Start the reflex test again from zero.',startReflex);
+}
+function winReflex(){
+  runningReflex=false;clearTimeout(orbTimer);clearTimeout(nextOrbTimer);hideOrb();
+  reflexStatus.textContent='TIMELINE PURGED // MEPHILES SIGNAL REJECTED';sfx('good');chaosFX();
+  setTimeout(()=>show(12),900);
+}
+orb.addEventListener('click',e=>{
+  e.preventDefault();
+  if(!runningReflex)return;
+  clearTimeout(orbTimer);
+  if(orbType==='real'){
+    rHits++;updateReflex();sfx('good');hideOrb();
+    if(rHits>=8){winReflex();return}
+    reflexStatus.textContent='REAL SIGNAL LOCKED';scheduleOrb();
+  }else{
+    rDamage++;updateReflex();sfx('bad');hideOrb();reflexStatus.textContent='MEPHILES DECOY HIT';
+    if(rDamage>=3){loseReflex();return}
+    scheduleOrb();
+  }
 });
-document.getElementById('lieFailed').addEventListener('click',()=>{
-  document.getElementById('lieStatus').textContent='MEPHILES HAS SUCCESSFULLY GASLIT THE TIMELINE.';
-  sfx('bad');setTimeout(()=>show(13),1000);
-});
+reflexStart.addEventListener('click',startReflex);
 
 /* RANDOM CHALLENGE */
 const challenges=[
-  ['ROCK PAPER SCISSORS','Best of 5. Winner gets bragging rights, loser gets character development.'],
+  ['ROCK PAPER SCISSORS','Best of 5. Winner receives bragging rights. Loser receives character development.'],
   ['BAD PORTRAIT','You both have 30 seconds to draw each other. Worst portrait wins. Yes, worst.'],
-  ['SYNC ANSWER','Both write “What would the other person buy with a totally unnecessary 500 TL?” Reveal together.'],
-  ['SONIC POSE','You both have 10 seconds to perform the worst Sonic pose possible. Game Master judges dramatically.'],
-  ['NO-LAUGH DUEL','Stare at each other for 30 seconds. First person to laugh loses. Making stupid faces is legal.'],
+  ['SYNC ANSWER','Both answer: “What would the other person buy with a completely unnecessary 500 TL?” Reveal together.'],
+  ['SONIC POSE','You both have 10 seconds to perform the worst possible Sonic pose. Judge with unnecessary seriousness.'],
+  ['NO-LAUGH DUEL','Stare at each other for 30 seconds. First person to laugh loses. Stupid faces are legal.'],
   ['ONE-WORD STORY','Create a 20-word story together, alternating one word at a time. It must include Sonic, a kebab and a government conspiracy.']
 ];
 let chosen=false;
@@ -296,18 +786,17 @@ document.getElementById('randomChallenge').addEventListener('click',()=>{
   const c=challenges[Math.floor(Math.random()*challenges.length)];
   document.getElementById('gmChallenge').textContent=c[0];
   document.getElementById('gmChallengeText').textContent=c[1];
-  document.getElementById('challengeDone').style.display='inline-block';
-  chosen=true;sfx('ui');
+  document.getElementById('challengeDone').style.display='inline-block';chosen=true;sfx('ui');
 });
-document.getElementById('challengeDone').addEventListener('click',()=>{if(chosen)show(14)});
+document.getElementById('challengeDone').addEventListener('click',()=>{if(chosen)show(13)});
 
-/* TURQUOISE */
+/* CYAN */
 document.getElementById('cyanClaim').addEventListener('click',()=>{
-  emeraldCounter.textContent='CHAOS EMERALDS ◆ 3 / 7';sfx('emerald');flashNow();show(15);
+  emeraldCounter.textContent='CHAOS EMERALDS ◆ 3 / 7';sfx('emerald');chaosFX();flashNow();setTimeout(()=>show(14),700)
 });
 
 /* SHADOW SAYS */
-const cmds=[
+const commands=[
   {t:'SHADOW SAYS: Touch something blue.',do:true},
   {t:'Touch your nose.',do:false},
   {t:'SHADOW SAYS: Point at the Game Master.',do:true},
@@ -316,64 +805,71 @@ const cmds=[
   {t:'Stand up.',do:false},
   {t:'SHADOW SAYS: Do your best Sonic pose.',do:true}
 ];
-let ci=0,score=0,started=false;
-function renderCmd(){
-  document.getElementById('commandCount').textContent='COMMAND '+(ci+1)+' / '+cmds.length;
-  document.getElementById('shadowCommand').textContent=cmds[ci].t;
+let commandIndex=0,shadowScore=0,shadowStarted=false,shadowLocked=false;
+function renderCommand(){
+  shadowLocked=false;
+  document.getElementById('commandCount').textContent='COMMAND '+(commandIndex+1)+' / '+commands.length;
+  document.getElementById('shadowCommand').textContent=commands[commandIndex].t;
   document.getElementById('shadowStatus').textContent='';
 }
-document.getElementById('shadowStart').addEventListener('click',()=>{
-  started=true;ci=0;score=0;document.getElementById('shadowStart').style.display='none';renderCmd();
-});
+function resetShadow(){
+  commandIndex=0;shadowScore=0;shadowStarted=true;shadowLocked=false;
+  document.getElementById('shadowStart').style.display='none';
+  renderCommand();
+}
+document.getElementById('shadowStart').addEventListener('click',resetShadow);
 function shadowAnswer(did){
-  if(!started)return;
-  const correct=(did===cmds[ci].do);
-  if(correct){score++;sfx('good');document.getElementById('shadowStatus').textContent='GOOD.'}
-  else{sfx('bad');document.getElementById('shadowStatus').textContent='ROUGE SAW THAT.'}
+  if(!shadowStarted||shadowLocked)return;
+  shadowLocked=true;
+  const correct=(did===commands[commandIndex].do);
+  if(!correct){
+    sfx('bad');
+    failGame('Shadow gave one instruction. You did the opposite. Entire command sequence reset.',resetShadow);
+    return;
+  }
+  shadowScore++;sfx('good');document.getElementById('shadowStatus').textContent='COMMAND VERIFIED.';
   setTimeout(()=>{
-    ci++;
-    if(ci>=cmds.length){
+    commandIndex++;
+    if(commandIndex>=commands.length){
       document.getElementById('shadowCommand').textContent='SHADOW TEST COMPLETE';
-      document.getElementById('shadowStatus').textContent=score+' / '+cmds.length+' correct';
-      setTimeout(()=>show(17),800);
-    }else renderCmd();
-  },550);
+      document.getElementById('shadowStatus').textContent=shadowScore+' / '+commands.length+' CORRECT';
+      setTimeout(()=>show(16),900);
+    }else renderCommand();
+  },600);
 }
 document.getElementById('didIt').addEventListener('click',()=>shadowAnswer(true));
 document.getElementById('didnt').addEventListener('click',()=>shadowAnswer(false));
 
 /* CHAOS CONTROL */
-const expected=['L','R','H','T','T']; // user sees 4 stages, last stage is tap tap
-let input=[],stage=0,locked=false;
+const expected=['L','R','H','T','T'];
+let chaosInput=[],locked=false;
 const seqEls=[0,1,2,3].map(i=>document.getElementById('seq'+i));
 function resetChaos(){
-  input=[];stage=0;locked=false;seqEls.forEach(x=>x.classList.remove('done'));
-  document.getElementById('chaosStatus').textContent='0 / 4 synchronized';
+  chaosInput=[];locked=false;seqEls.forEach(x=>x.classList.remove('done'));
+  document.getElementById('chaosStatus').textContent='0 / 4 SYNCHRONIZED';
 }
 document.querySelectorAll('.ctrl').forEach(btn=>{
   btn.addEventListener('click',()=>{
     if(locked)return;
-    input.push(btn.dataset.act);
-    const len=input.length;
+    chaosInput.push(btn.dataset.act);
+    const len=chaosInput.length;
     for(let i=0;i<len;i++){
-      if(input[i]!==expected[i]){
+      if(chaosInput[i]!==expected[i]){
         locked=true;sfx('bad');
-        document.getElementById('chaosStatus').textContent='CHAOS CONTROL FAILED — resetting timeline...';
-        setTimeout(resetChaos,850);return;
+        failGame('Chaos Control sequence broke. The timeline rejected the input. Synchronization reset.',resetChaos);
+        return;
       }
     }
     if(len===1)seqEls[0].classList.add('done');
     if(len===2)seqEls[1].classList.add('done');
     if(len===3)seqEls[2].classList.add('done');
     if(len===5)seqEls[3].classList.add('done');
-
     const displayStage=len<3?len:(len<5?3:4);
-    document.getElementById('chaosStatus').textContent=displayStage+' / 4 synchronized';
-
+    document.getElementById('chaosStatus').textContent=displayStage+' / 4 SYNCHRONIZED';
     if(len===5){
-      locked=true;sfx('portal');flashNow();
+      locked=true;sfx('portal');chaosFX();flashNow();
       document.getElementById('chaosStatus').textContent='CHAOS CONTROL';
-      setTimeout(()=>show(19),850);
+      setTimeout(()=>show(18),1000);
     }
   });
 });
