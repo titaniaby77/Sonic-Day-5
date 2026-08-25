@@ -138,11 +138,11 @@ button:disabled{cursor:not-allowed}
 .screen{
   position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;
   padding:calc(74px + env(safe-area-inset-top)) 16px calc(32px + env(safe-area-inset-bottom));
-  opacity:0;pointer-events:none;overflow-y:auto;
+  opacity:0;visibility:hidden;pointer-events:none;overflow-y:auto;
   transform:scale(.965) translateY(22px);filter:blur(8px);
   transition:opacity .48s ease,transform .7s cubic-bezier(.12,.75,.2,1),filter .55s ease
 }
-.screen.active{opacity:1;pointer-events:auto;filter:none;transform:scale(1) translateY(0)}
+.screen.active{opacity:1;visibility:visible;pointer-events:auto;filter:none;transform:scale(1) translateY(0)}
 .screen.active .card,.screen.active .story{animation:cardArrival .65s cubic-bezier(.2,.8,.25,1)}
 @keyframes cardArrival{0%{opacity:0;transform:translateY(35px) scale(.94)}60%{transform:translateY(-4px) scale(1.012)}100%{opacity:1;transform:none}}
 .wrap{width:min(920px,100%);text-align:center}
@@ -481,37 +481,70 @@ button:disabled{cursor:not-allowed}
   </div></div></section>
 
   <section class="screen" id="s14"><div class="wrap"><div class="story">
-    <div class="kicker">SHADOW EPISODE </div>
-    <h2>Mephiles lied.</h2>
-    <p>Shadow confronts Silver and challenges the story Mephiles has been feeding him.</p>
-    <p>Silver begins to realize that the future he is trying to save may have pushed him into exactly the role Mephiles wanted him to play</p>
-    <p>Instead of blindly following another command, Silver finally starts questioning the source.</p>
-    <button class="primary" data-next="15" type="button">SHADOW SAYS</button>
+    <div class="kicker">SHADOW EPISODE // SIGNAL LINK</div>
+    <h2>Mephiles lied. Shadow needs a clean signal.</h2>
+    <p>Shadow confronts Silver and breaks the story Mephiles has been feeding him apart. If Silver is going to stop following false instructions, he needs a signal he can actually trust.</p>
+    <p>So this time there is no “Shadow Says.” You two have to synchronize like a tiny two-person Chaos Control unit: one person handles the digital sequence, the other performs the same pattern in real life.</p>
+    <button class="primary" data-next="15" type="button">BEGIN SHADOW SYNC</button>
   </div></div></section>
 
   <section class="screen" id="s15"><div class="wrap"><div class="card">
-    <div class="kicker">SHADOW </div>
-    <h2>SHADOW SAYS</h2>
-    <p>Only follow a command if it begins with <strong>SHADOW SAYS.</strong></p>
-    <div class="commandCount" id="commandCount">COMMAND 1 / 7</div>
-    <div class="shadowCommand" id="shadowCommand">Ready?</div>
-    <div class="shadowButtons">
-      <button class="primary yes" id="didIt" type="button">I DID IT</button>
-      <button class="danger no" id="didnt" type="button">I DIDN'T</button>
+    <div class="kicker">SHADOW SYNC // DIGITAL + IRL CO-OP</div>
+    <h2>Memorize. Perform. Synchronize.</h2>
+    <p>The pattern appears for a moment. <strong>Game Master</strong> must enter it on the phone while <strong>Birthday Princess</strong> performs the matching moves in real life. Then both of you must hold your SYNC buttons together.</p>
+
+    <div class="syncPanel">
+      <div class="syncRound">
+        <span id="syncRound">ROUND 1 / 4</span>
+        <span id="syncState">PRESS START</span>
+      </div>
+
+      <div class="syncPattern" id="syncPattern"></div>
+
+      <div class="syncRoles">
+        <div class="syncRole">
+          <b>BIRTHDAY PRINCESS // IRL</b>
+          <p>◀ = lean/step left<br>▶ = lean/step right<br>● = clap once<br>HOLD = freeze dramatically</p>
+        </div>
+        <div class="syncRole">
+          <b>GAME MASTER // PHONE</b>
+          <p>Memorize the same symbols and enter them below. Do not call the moves out loud. Let the princess remember her own damn sequence.</p>
+        </div>
+      </div>
+
+      <div class="syncInput">
+        <button type="button" data-sync-act="L">◀ LEFT</button>
+        <button type="button" data-sync-act="R">RIGHT ▶</button>
+        <button type="button" data-sync-act="T">● CLAP</button>
+        <button type="button" data-sync-act="H">HOLD</button>
+      </div>
+
+      <div class="syncEntered" id="syncEntered"></div>
+
+      <div class="syncLock" id="syncLock" style="display:none">
+        <div class="syncHint">Digital pattern correct. Now both people hold their buttons at the same time for 1.3 seconds.</div>
+        <div class="syncHoldRow">
+          <button class="syncHold" id="princessSync" type="button">PRINCESS SYNC</button>
+          <button class="syncHold" id="masterSync" type="button">MASTER SYNC</button>
+        </div>
+        <div class="syncCharge"><div class="syncChargeFill" id="syncChargeFill"></div></div>
+      </div>
+
+      <div class="status" id="syncStatus">4 synchronized rounds required.</div>
     </div>
-    <div class="status" id="shadowStatus"></div>
-    <button class="primary" id="shadowStart" type="button">START</button>
+
+    <button class="primary" id="syncStart" type="button">START ROUND 1</button>
   </div></div></section>
 
   <section class="screen" id="s16"><div class="wrap"><div class="card">
-    <div class="kicker">CHAOS CONTROL // GAME MASTER</div>
+    <div class="kicker">CHAOS CONTROL GAME MASTER</div>
     <h2>Memorize this sequence.</h2>
     <div class="realMission"><strong>GAME MASTER ONLY</strong><p style="font-size:1.25rem"><strong>LEFT → RIGHT → HOLD → TAP TAP</strong></p><p>You may NOT say: <strong>left, right, hold, tap.</strong></p></div>
     <button class="primary" data-next="17" type="button">I MEMORIZED IT — HIDE</button>
   </div></div></section>
 
   <section class="screen" id="s17"><div class="wrap"><div class="card">
-    <div class="kicker">CHAOS CONTROL // SYNCHRONIZATION</div>
+    <div class="kicker">CHAOS CONTROL SYNCHRONIZATION</div>
     <h2>Synchronize the Emeralds.</h2>
     <p>The two Chaos Emeralds begin resonating.<br><br>Game Master knows the activation sequence. They must guide you without speaking any forbidden words.</p>
     <div class="sequenceDisplay"><span class="seq" id="seq0">1</span><span class="seq" id="seq1">2</span><span class="seq" id="seq2">3</span><span class="seq" id="seq3">4</span></div>
@@ -791,50 +824,225 @@ document.getElementById('cyanClaim').addEventListener('click',()=>{
   emeraldCounter.textContent='CHAOS EMERALDS ◆ 3 / 7';sfx('emerald');chaosFX();flashNow();setTimeout(()=>show(14),700)
 });
 
-/* SHADOW SAYS */
-const commands=[
-  {t:'SHADOW SAYS: Touch something blue.',do:true},
-  {t:'Touch your nose.',do:false},
-  {t:'SHADOW SAYS: Point at the Game Master.',do:true},
-  {t:'Clap twice.',do:false},
-  {t:'SHADOW SAYS: Freeze.',do:true},
-  {t:'Stand up.',do:false},
-  {t:'SHADOW SAYS: Do your best Sonic pose.',do:true}
-];
-let commandIndex=0,shadowScore=0,shadowStarted=false,shadowLocked=false;
-function renderCommand(){
-  shadowLocked=false;
-  document.getElementById('commandCount').textContent='COMMAND '+(commandIndex+1)+' / '+commands.length;
-  document.getElementById('shadowCommand').textContent=commands[commandIndex].t;
-  document.getElementById('shadowStatus').textContent='';
-}
-function resetShadow(){
-  commandIndex=0;shadowScore=0;shadowStarted=true;shadowLocked=false;
-  document.getElementById('shadowStart').style.display='none';
-  renderCommand();
-}
-document.getElementById('shadowStart').addEventListener('click',resetShadow);
-function shadowAnswer(did){
-  if(!shadowStarted||shadowLocked)return;
-  shadowLocked=true;
-  const correct=(did===commands[commandIndex].do);
-  if(!correct){
-    sfx('bad');
-    failGame('Shadow gave one instruction. You did the opposite. Entire command sequence reset.',resetShadow);
-    return;
+/* SHADOW SYNC // DIGITAL + IRL CO-OP */
+const syncPatternEl=document.getElementById('syncPattern');
+const syncRoundEl=document.getElementById('syncRound');
+const syncStateEl=document.getElementById('syncState');
+const syncEnteredEl=document.getElementById('syncEntered');
+const syncStatusEl=document.getElementById('syncStatus');
+const syncStart=document.getElementById('syncStart');
+const syncLock=document.getElementById('syncLock');
+const syncChargeFill=document.getElementById('syncChargeFill');
+const princessSync=document.getElementById('princessSync');
+const masterSync=document.getElementById('masterSync');
+const syncInputBtns=[...document.querySelectorAll('[data-sync-act]')];
+
+const syncSymbols={L:'◀',R:'▶',T:'●',H:'HOLD'};
+let syncRound=0;
+let syncSequence=[];
+let syncInput=[];
+let syncCanInput=false;
+let syncRevealTimer=null;
+let princessHeld=false;
+let masterHeld=false;
+let syncCharge=0;
+let syncChargeTimer=null;
+let syncFinishing=false;
+
+function makeSyncSequence(){
+  const pool=['L','R','T','H'];
+  const len=syncRound<2?3:4;
+  const seq=[];
+  while(seq.length<len){
+    const next=pool[Math.floor(Math.random()*pool.length)];
+    if(seq.length && next===seq[seq.length-1]) continue;
+    seq.push(next);
   }
-  shadowScore++;sfx('good');document.getElementById('shadowStatus').textContent='COMMAND VERIFIED.';
-  setTimeout(()=>{
-    commandIndex++;
-    if(commandIndex>=commands.length){
-      document.getElementById('shadowCommand').textContent='SHADOW TEST COMPLETE';
-      document.getElementById('shadowStatus').textContent=shadowScore+' / '+commands.length+' CORRECT';
-      setTimeout(()=>show(16),900);
-    }else renderCommand();
-  },600);
+  return seq;
 }
-document.getElementById('didIt').addEventListener('click',()=>shadowAnswer(true));
-document.getElementById('didnt').addEventListener('click',()=>shadowAnswer(false));
+
+function renderSyncPattern(hidden=false){
+  syncPatternEl.innerHTML='';
+  syncPatternEl.classList.toggle('hiddenPattern',hidden);
+  syncSequence.forEach(code=>{
+    const token=document.createElement('div');
+    token.className='syncToken';
+    token.textContent=syncSymbols[code];
+    syncPatternEl.appendChild(token);
+  });
+}
+
+function renderSyncEntered(){
+  syncEnteredEl.innerHTML='';
+  syncInput.forEach(code=>{
+    const span=document.createElement('span');
+    span.textContent=syncSymbols[code];
+    syncEnteredEl.appendChild(span);
+  });
+}
+
+function resetSyncCharge(){
+  princessHeld=false;
+  masterHeld=false;
+  syncCharge=0;
+  princessSync.classList.remove('active');
+  masterSync.classList.remove('active');
+  syncChargeFill.style.width='0%';
+  if(syncChargeTimer){
+    clearInterval(syncChargeTimer);
+    syncChargeTimer=null;
+  }
+}
+
+function resetShadowSync(){
+  clearTimeout(syncRevealTimer);
+  resetSyncCharge();
+  syncRound=0;
+  syncSequence=[];
+  syncInput=[];
+  syncCanInput=false;
+  syncFinishing=false;
+  syncPatternEl.innerHTML='';
+  syncEnteredEl.innerHTML='';
+  syncLock.style.display='none';
+  syncRoundEl.textContent='ROUND 1 / 4';
+  syncStateEl.textContent='PRESS START';
+  syncStatusEl.textContent='4 synchronized rounds required.';
+  syncStart.style.display='inline-block';
+  syncStart.disabled=false;
+  syncStart.textContent='START ROUND 1';
+}
+
+function startSyncRound(){
+  if(syncFinishing)return;
+  clearTimeout(syncRevealTimer);
+  resetSyncCharge();
+  syncInput=[];
+  syncCanInput=false;
+  syncLock.style.display='none';
+  renderSyncEntered();
+  syncSequence=makeSyncSequence();
+  syncRoundEl.textContent='ROUND '+(syncRound+1)+' / 4';
+  syncStateEl.textContent='MEMORIZE';
+  syncStatusEl.textContent='Princess: memorize the IRL moves. Master: memorize the phone sequence.';
+  syncStart.style.display='none';
+  renderSyncPattern(false);
+  sfx('ui');
+
+  syncRevealTimer=setTimeout(()=>{
+    renderSyncPattern(true);
+    syncCanInput=true;
+    syncStateEl.textContent='PERFORM + INPUT';
+    syncStatusEl.textContent='Birthday Princess performs it IRL while Game Master enters it digitally.';
+  },2200);
+}
+
+syncStart.addEventListener('click',startSyncRound);
+
+syncInputBtns.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    if(!syncCanInput||syncFinishing)return;
+    const act=btn.dataset.syncAct;
+    const expected=syncSequence[syncInput.length];
+
+    if(act!==expected){
+      syncCanInput=false;
+      sfx('bad');
+      failGame(
+        'Digital pattern broke. Birthday Princess and Game Master were not synchronized. Baştan alıyoruz.',
+        resetShadowSync
+      );
+      return;
+    }
+
+    syncInput.push(act);
+    renderSyncEntered();
+    sfx('good');
+
+    if(syncInput.length===syncSequence.length){
+      syncCanInput=false;
+      syncStateEl.textContent='DIGITAL LOCKED';
+      syncStatusEl.textContent='Pattern correct. Both of you: hold SYNC together.';
+      syncLock.style.display='block';
+    }
+  });
+});
+
+function startSyncChargeLoop(){
+  if(syncChargeTimer||syncFinishing)return;
+  syncChargeTimer=setInterval(()=>{
+    if(syncFinishing)return;
+
+    if(princessHeld&&masterHeld){
+      syncCharge=Math.min(1300,syncCharge+50);
+    }else{
+      syncCharge=Math.max(0,syncCharge-90);
+    }
+
+    syncChargeFill.style.width=(syncCharge/1300*100)+'%';
+
+    if(syncCharge>=1300){
+      syncFinishing=true;
+      clearInterval(syncChargeTimer);
+      syncChargeTimer=null;
+      sfx('portal');
+      chaosFX();
+      flashNow();
+
+      syncRound++;
+      syncStatusEl.textContent='CHAOS LINK SYNCHRONIZED.';
+      syncStateEl.textContent='ROUND CLEAR';
+
+      setTimeout(()=>{
+        syncFinishing=false;
+        if(syncRound>=4){
+          syncRoundEl.textContent='SYNC 4 / 4';
+          syncStateEl.textContent='COMPLETE';
+          syncStatusEl.textContent='SHADOW LINK STABLE // CO-OP SYNC COMPLETE';
+          syncLock.style.display='none';
+          setTimeout(()=>show(16),850);
+        }else{
+          syncSequence=[];
+          syncInput=[];
+          syncPatternEl.innerHTML='';
+          syncEnteredEl.innerHTML='';
+          syncLock.style.display='none';
+          resetSyncCharge();
+          syncRoundEl.textContent='ROUND '+(syncRound+1)+' / 4';
+          syncStateEl.textContent='READY';
+          syncStatusEl.textContent='Next pattern will be different.';
+          syncStart.style.display='inline-block';
+          syncStart.disabled=false;
+          syncStart.textContent='START ROUND '+(syncRound+1);
+        }
+      },700);
+    }
+  },50);
+}
+
+function bindSyncHold(btn,setHeld){
+  const down=e=>{
+    e.preventDefault();
+    if(syncLock.style.display==='none'||syncFinishing)return;
+    setHeld(true);
+    btn.classList.add('active');
+    startSyncChargeLoop();
+  };
+  const up=e=>{
+    e.preventDefault();
+    setHeld(false);
+    btn.classList.remove('active');
+  };
+  btn.addEventListener('pointerdown',down);
+  btn.addEventListener('pointerup',up);
+  btn.addEventListener('pointercancel',up);
+  btn.addEventListener('pointerleave',up);
+}
+
+bindSyncHold(princessSync,v=>princessHeld=v);
+bindSyncHold(masterSync,v=>masterHeld=v);
+
+resetShadowSync();
 
 /* CHAOS CONTROL */
 const expected=['L','R','H','T','T'];
